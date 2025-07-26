@@ -5,7 +5,7 @@ import '../models/app_state.dart';
 import '../screens/history_screen.dart'; // Import Transaction class
 
 class AppProvider extends ChangeNotifier {
-  AppState _state = AppState();
+  AppState _state = const AppState();
 
   AppState get state => _state;
 
@@ -13,192 +13,485 @@ class AppProvider extends ChangeNotifier {
     loadState();
   }
 
-  // 7-Piece Plate Methods
+  // ===== STEAM VEG METHODS =====
 
-  void incrementSevenPiece(String category) {
+  // 7-Piece Steam Veg
+  void incrementSteamVeg7Piece() {
     final newHistory = List<Transaction>.from(_state.history)..add(
       Transaction(
         action: 'increment',
-        category: category,
+        category: 'steam_veg',
         plateSize: 7,
         timestamp: DateTime.now(),
       ),
     );
 
-    switch (category) {
-      case 'veg':
-        _state = _state.copyWith(
-          veg7PieceNo: _state.veg7PieceNo + 1,
-          history: newHistory,
-        );
-        break;
-      case 'chicken':
-        _state = _state.copyWith(
-          chicken7PieceNo: _state.chicken7PieceNo + 1,
-          history: newHistory,
-        );
-        break;
-    }
+    _state = _state.copyWith(
+      steamVeg7PieceNo: _state.steamVeg7PieceNo + 1,
+      history: newHistory,
+    );
     notifyListeners();
     saveState();
   }
 
-  void decrementSevenPiece(String category) {
+  void decrementSteamVeg7Piece() {
+    if (_state.steamVeg7PieceNo > 0) {
+      final newHistory = List<Transaction>.from(_state.history)..add(
+        Transaction(
+          action: 'decrement',
+          category: 'steam_veg',
+          plateSize: 7,
+          timestamp: DateTime.now(),
+        ),
+      );
+
+      _state = _state.copyWith(
+        steamVeg7PieceNo: _state.steamVeg7PieceNo - 1,
+        history: newHistory,
+      );
+      notifyListeners();
+      saveState();
+    }
+  }
+
+  // 4-Piece Steam Veg
+  void incrementSteamVeg4Piece() {
     final newHistory = List<Transaction>.from(_state.history)..add(
       Transaction(
-        action: 'decrement',
-        category: category,
+        action: 'increment',
+        category: 'steam_veg',
+        plateSize: 4,
+        timestamp: DateTime.now(),
+      ),
+    );
+
+    _state = _state.copyWith(
+      steamVeg4PieceNo: _state.steamVeg4PieceNo + 1,
+      history: newHistory,
+    );
+    notifyListeners();
+    saveState();
+  }
+
+  void decrementSteamVeg4Piece() {
+    if (_state.steamVeg4PieceNo > 0) {
+      final newHistory = List<Transaction>.from(_state.history)..add(
+        Transaction(
+          action: 'decrement',
+          category: 'steam_veg',
+          plateSize: 4,
+          timestamp: DateTime.now(),
+        ),
+      );
+
+      _state = _state.copyWith(
+        steamVeg4PieceNo: _state.steamVeg4PieceNo - 1,
+        history: newHistory,
+      );
+      notifyListeners();
+      saveState();
+    }
+  }
+
+  // 8-Piece Steam Veg
+  void incrementSteamVeg8Piece() {
+    final newHistory = List<Transaction>.from(_state.history)..add(
+      Transaction(
+        action: 'increment',
+        category: 'steam_veg',
+        plateSize: 8,
+        timestamp: DateTime.now(),
+      ),
+    );
+
+    _state = _state.copyWith(
+      steamVeg8PieceNo: _state.steamVeg8PieceNo + 1,
+      history: newHistory,
+    );
+    notifyListeners();
+    saveState();
+  }
+
+  void decrementSteamVeg8Piece() {
+    if (_state.steamVeg8PieceNo > 0) {
+      final newHistory = List<Transaction>.from(_state.history)..add(
+        Transaction(
+          action: 'decrement',
+          category: 'steam_veg',
+          plateSize: 8,
+          timestamp: DateTime.now(),
+        ),
+      );
+
+      _state = _state.copyWith(
+        steamVeg8PieceNo: _state.steamVeg8PieceNo - 1,
+        history: newHistory,
+      );
+      notifyListeners();
+      saveState();
+    }
+  }
+
+  // ===== STEAM CHICKEN METHODS =====
+
+  // 7-Piece Steam Chicken
+  void incrementSteamChicken7Piece() {
+    final newHistory = List<Transaction>.from(_state.history)..add(
+      Transaction(
+        action: 'increment',
+        category: 'steam_chicken',
         plateSize: 7,
         timestamp: DateTime.now(),
       ),
     );
 
-    switch (category) {
-      case 'veg':
-        if (_state.veg7PieceNo > 0) {
-          _state = _state.copyWith(
-            veg7PieceNo: _state.veg7PieceNo - 1,
-            history: newHistory,
-          );
-        }
-        break;
-      case 'chicken':
-        if (_state.chicken7PieceNo > 0) {
-          _state = _state.copyWith(
-            chicken7PieceNo: _state.chicken7PieceNo - 1,
-            history: newHistory,
-          );
-        }
-        break;
-    }
+    _state = _state.copyWith(
+      steamChicken7PieceNo: _state.steamChicken7PieceNo + 1,
+      history: newHistory,
+    );
     notifyListeners();
     saveState();
   }
 
-  // 4-Piece Plate Methods
+  void decrementSteamChicken7Piece() {
+    if (_state.steamChicken7PieceNo > 0) {
+      final newHistory = List<Transaction>.from(_state.history)..add(
+        Transaction(
+          action: 'decrement',
+          category: 'steam_chicken',
+          plateSize: 7,
+          timestamp: DateTime.now(),
+        ),
+      );
 
-  void incrementFourPiece(String category) {
+      _state = _state.copyWith(
+        steamChicken7PieceNo: _state.steamChicken7PieceNo - 1,
+        history: newHistory,
+      );
+      notifyListeners();
+      saveState();
+    }
+  }
+
+  // 4-Piece Steam Chicken
+  void incrementSteamChicken4Piece() {
     final newHistory = List<Transaction>.from(_state.history)..add(
       Transaction(
         action: 'increment',
-        category: category,
+        category: 'steam_chicken',
         plateSize: 4,
         timestamp: DateTime.now(),
       ),
     );
 
-    switch (category) {
-      case 'veg':
-        _state = _state.copyWith(
-          veg4PieceNo: _state.veg4PieceNo + 1,
-          history: newHistory,
-        );
-        break;
-      case 'chicken':
-        _state = _state.copyWith(
-          chicken4PieceNo: _state.chicken4PieceNo + 1,
-          history: newHistory,
-        );
-        break;
-    }
+    _state = _state.copyWith(
+      steamChicken4PieceNo: _state.steamChicken4PieceNo + 1,
+      history: newHistory,
+    );
     notifyListeners();
     saveState();
   }
 
-  void decrementFourPiece(String category) {
+  void decrementSteamChicken4Piece() {
+    if (_state.steamChicken4PieceNo > 0) {
+      final newHistory = List<Transaction>.from(_state.history)..add(
+        Transaction(
+          action: 'decrement',
+          category: 'steam_chicken',
+          plateSize: 4,
+          timestamp: DateTime.now(),
+        ),
+      );
+
+      _state = _state.copyWith(
+        steamChicken4PieceNo: _state.steamChicken4PieceNo - 1,
+        history: newHistory,
+      );
+      notifyListeners();
+      saveState();
+    }
+  }
+
+  // 8-Piece Steam Chicken
+  void incrementSteamChicken8Piece() {
     final newHistory = List<Transaction>.from(_state.history)..add(
       Transaction(
-        action: 'decrement',
-        category: category,
+        action: 'increment',
+        category: 'steam_chicken',
+        plateSize: 8,
+        timestamp: DateTime.now(),
+      ),
+    );
+
+    _state = _state.copyWith(
+      steamChicken8PieceNo: _state.steamChicken8PieceNo + 1,
+      history: newHistory,
+    );
+    notifyListeners();
+    saveState();
+  }
+
+  void decrementSteamChicken8Piece() {
+    if (_state.steamChicken8PieceNo > 0) {
+      final newHistory = List<Transaction>.from(_state.history)..add(
+        Transaction(
+          action: 'decrement',
+          category: 'steam_chicken',
+          plateSize: 8,
+          timestamp: DateTime.now(),
+        ),
+      );
+
+      _state = _state.copyWith(
+        steamChicken8PieceNo: _state.steamChicken8PieceNo - 1,
+        history: newHistory,
+      );
+      notifyListeners();
+      saveState();
+    }
+  }
+
+  // ===== FRIED VEG METHODS =====
+
+  // 7-Piece Fried Veg
+  void incrementFriedVeg7Piece() {
+    final newHistory = List<Transaction>.from(_state.history)..add(
+      Transaction(
+        action: 'increment',
+        category: 'fried_veg',
+        plateSize: 7,
+        timestamp: DateTime.now(),
+      ),
+    );
+
+    _state = _state.copyWith(
+      friedVeg7PieceNo: _state.friedVeg7PieceNo + 1,
+      history: newHistory,
+    );
+    notifyListeners();
+    saveState();
+  }
+
+  void decrementFriedVeg7Piece() {
+    if (_state.friedVeg7PieceNo > 0) {
+      final newHistory = List<Transaction>.from(_state.history)..add(
+        Transaction(
+          action: 'decrement',
+          category: 'fried_veg',
+          plateSize: 7,
+          timestamp: DateTime.now(),
+        ),
+      );
+
+      _state = _state.copyWith(
+        friedVeg7PieceNo: _state.friedVeg7PieceNo - 1,
+        history: newHistory,
+      );
+      notifyListeners();
+      saveState();
+    }
+  }
+
+  // 4-Piece Fried Veg
+  void incrementFriedVeg4Piece() {
+    final newHistory = List<Transaction>.from(_state.history)..add(
+      Transaction(
+        action: 'increment',
+        category: 'fried_veg',
         plateSize: 4,
         timestamp: DateTime.now(),
       ),
     );
 
-    switch (category) {
-      case 'veg':
-        if (_state.veg4PieceNo > 0) {
-          _state = _state.copyWith(
-            veg4PieceNo: _state.veg4PieceNo - 1,
-            history: newHistory,
-          );
-        }
-        break;
-      case 'chicken':
-        if (_state.chicken4PieceNo > 0) {
-          _state = _state.copyWith(
-            chicken4PieceNo: _state.chicken4PieceNo - 1,
-            history: newHistory,
-          );
-        }
-        break;
-    }
+    _state = _state.copyWith(
+      friedVeg4PieceNo: _state.friedVeg4PieceNo + 1,
+      history: newHistory,
+    );
     notifyListeners();
     saveState();
   }
 
-  // 8-Piece Plate Methods
+  void decrementFriedVeg4Piece() {
+    if (_state.friedVeg4PieceNo > 0) {
+      final newHistory = List<Transaction>.from(_state.history)..add(
+        Transaction(
+          action: 'decrement',
+          category: 'fried_veg',
+          plateSize: 4,
+          timestamp: DateTime.now(),
+        ),
+      );
 
-  void incrementEightPiece(String category) {
+      _state = _state.copyWith(
+        friedVeg4PieceNo: _state.friedVeg4PieceNo - 1,
+        history: newHistory,
+      );
+      notifyListeners();
+      saveState();
+    }
+  }
+
+  // 8-Piece Fried Veg
+  void incrementFriedVeg8Piece() {
     final newHistory = List<Transaction>.from(_state.history)..add(
       Transaction(
         action: 'increment',
-        category: category,
+        category: 'fried_veg',
         plateSize: 8,
         timestamp: DateTime.now(),
       ),
     );
 
-    switch (category) {
-      case 'veg':
-        _state = _state.copyWith(
-          veg8PieceNo: _state.veg8PieceNo + 1,
-          history: newHistory,
-        );
-        break;
-      case 'chicken':
-        _state = _state.copyWith(
-          chicken8PieceNo: _state.chicken8PieceNo + 1,
-          history: newHistory,
-        );
-        break;
-    }
+    _state = _state.copyWith(
+      friedVeg8PieceNo: _state.friedVeg8PieceNo + 1,
+      history: newHistory,
+    );
     notifyListeners();
     saveState();
   }
 
-  void decrementEightPiece(String category) {
+  void decrementFriedVeg8Piece() {
+    if (_state.friedVeg8PieceNo > 0) {
+      final newHistory = List<Transaction>.from(_state.history)..add(
+        Transaction(
+          action: 'decrement',
+          category: 'fried_veg',
+          plateSize: 8,
+          timestamp: DateTime.now(),
+        ),
+      );
+
+      _state = _state.copyWith(
+        friedVeg8PieceNo: _state.friedVeg8PieceNo - 1,
+        history: newHistory,
+      );
+      notifyListeners();
+      saveState();
+    }
+  }
+
+  // ===== FRIED CHICKEN METHODS =====
+
+  // 7-Piece Fried Chicken
+  void incrementFriedChicken7Piece() {
     final newHistory = List<Transaction>.from(_state.history)..add(
       Transaction(
-        action: 'decrement',
-        category: category,
+        action: 'increment',
+        category: 'fried_chicken',
+        plateSize: 7,
+        timestamp: DateTime.now(),
+      ),
+    );
+
+    _state = _state.copyWith(
+      friedChicken7PieceNo: _state.friedChicken7PieceNo + 1,
+      history: newHistory,
+    );
+    notifyListeners();
+    saveState();
+  }
+
+  void decrementFriedChicken7Piece() {
+    if (_state.friedChicken7PieceNo > 0) {
+      final newHistory = List<Transaction>.from(_state.history)..add(
+        Transaction(
+          action: 'decrement',
+          category: 'fried_chicken',
+          plateSize: 7,
+          timestamp: DateTime.now(),
+        ),
+      );
+
+      _state = _state.copyWith(
+        friedChicken7PieceNo: _state.friedChicken7PieceNo - 1,
+        history: newHistory,
+      );
+      notifyListeners();
+      saveState();
+    }
+  }
+
+  // 4-Piece Fried Chicken
+  void incrementFriedChicken4Piece() {
+    final newHistory = List<Transaction>.from(_state.history)..add(
+      Transaction(
+        action: 'increment',
+        category: 'fried_chicken',
+        plateSize: 4,
+        timestamp: DateTime.now(),
+      ),
+    );
+
+    _state = _state.copyWith(
+      friedChicken4PieceNo: _state.friedChicken4PieceNo + 1,
+      history: newHistory,
+    );
+    notifyListeners();
+    saveState();
+  }
+
+  void decrementFriedChicken4Piece() {
+    if (_state.friedChicken4PieceNo > 0) {
+      final newHistory = List<Transaction>.from(_state.history)..add(
+        Transaction(
+          action: 'decrement',
+          category: 'fried_chicken',
+          plateSize: 4,
+          timestamp: DateTime.now(),
+        ),
+      );
+
+      _state = _state.copyWith(
+        friedChicken4PieceNo: _state.friedChicken4PieceNo - 1,
+        history: newHistory,
+      );
+      notifyListeners();
+      saveState();
+    }
+  }
+
+  // 8-Piece Fried Chicken
+  void incrementFriedChicken8Piece() {
+    final newHistory = List<Transaction>.from(_state.history)..add(
+      Transaction(
+        action: 'increment',
+        category: 'fried_chicken',
         plateSize: 8,
         timestamp: DateTime.now(),
       ),
     );
 
-    switch (category) {
-      case 'veg':
-        if (_state.veg8PieceNo > 0) {
-          _state = _state.copyWith(
-            veg8PieceNo: _state.veg8PieceNo - 1,
-            history: newHistory,
-          );
-        }
-        break;
-      case 'chicken':
-        if (_state.chicken8PieceNo > 0) {
-          _state = _state.copyWith(
-            chicken8PieceNo: _state.chicken8PieceNo - 1,
-            history: newHistory,
-          );
-        }
-        break;
-    }
+    _state = _state.copyWith(
+      friedChicken8PieceNo: _state.friedChicken8PieceNo + 1,
+      history: newHistory,
+    );
     notifyListeners();
     saveState();
   }
 
+  void decrementFriedChicken8Piece() {
+    if (_state.friedChicken8PieceNo > 0) {
+      final newHistory = List<Transaction>.from(_state.history)..add(
+        Transaction(
+          action: 'decrement',
+          category: 'fried_chicken',
+          plateSize: 8,
+          timestamp: DateTime.now(),
+        ),
+      );
+
+      _state = _state.copyWith(
+        friedChicken8PieceNo: _state.friedChicken8PieceNo - 1,
+        history: newHistory,
+      );
+      notifyListeners();
+      saveState();
+    }
+  }
+
+  // ===== UTILITY METHODS - UPDATED FOR NEW STRUCTURE =====
+
+  // Reset all counters
   void resetAll() {
     final newHistory = List<Transaction>.from(_state.history)..add(
       Transaction(
@@ -210,37 +503,113 @@ class AppProvider extends ChangeNotifier {
     );
 
     _state = _state.copyWith(
-      veg7PieceNo: 0,
-      chicken7PieceNo: 0,
-      veg4PieceNo: 0, // NEW
-      chicken4PieceNo: 0, // NEW
-      veg8PieceNo: 0,
-      chicken8PieceNo: 0,
+      // Reset all steam counters
+      steamVeg7PieceNo: 0,
+      steamChicken7PieceNo: 0,
+      steamVeg4PieceNo: 0,
+      steamChicken4PieceNo: 0,
+      steamVeg8PieceNo: 0,
+      steamChicken8PieceNo: 0,
+      // Reset all fried counters
+      friedVeg7PieceNo: 0,
+      friedChicken7PieceNo: 0,
+      friedVeg4PieceNo: 0,
+      friedChicken4PieceNo: 0,
+      friedVeg8PieceNo: 0,
+      friedChicken8PieceNo: 0,
       history: newHistory,
     );
     notifyListeners();
     saveState();
   }
 
+  // Reset history
   void resetHistory() {
     _state = _state.copyWith(history: []);
     notifyListeners();
     saveState();
   }
 
-  // =============================================================================
-  // THEME METHODS - UNCHANGED
-  // =============================================================================
-
+  // Toggle theme
   void toggleTheme() {
     _state = _state.copyWith(darkMode: !_state.darkMode);
     notifyListeners();
     saveState();
   }
 
-  // =============================================================================
-  // PERSISTENCE METHODS - UPDATED (Compatible with new state structure)
-  // =============================================================================
+  // ===== HELPER METHODS FOR TOTALS - UPDATED =====
+
+  // Get total plates for a specific size (combining steam and fried)
+  int getTotalPlatesForSize(int plateSize) {
+    switch (plateSize) {
+      case 7:
+        return _state.steamVeg7PieceNo +
+            _state.steamChicken7PieceNo +
+            _state.friedVeg7PieceNo +
+            _state.friedChicken7PieceNo;
+      case 4:
+        return _state.steamVeg4PieceNo +
+            _state.steamChicken4PieceNo +
+            _state.friedVeg4PieceNo +
+            _state.friedChicken4PieceNo;
+      case 8:
+        return _state.steamVeg8PieceNo +
+            _state.steamChicken8PieceNo +
+            _state.friedVeg8PieceNo +
+            _state.friedChicken8PieceNo;
+      default:
+        return 0;
+    }
+  }
+
+  // Get total plates across all sizes
+  int getTotalPlatesAllSizes() {
+    return getTotalPlatesForSize(7) +
+        getTotalPlatesForSize(4) +
+        getTotalPlatesForSize(8);
+  }
+
+  // Get total veg plates (steam + fried)
+  int getTotalVegPlates() {
+    return _state.steamVeg7PieceNo +
+        _state.steamVeg4PieceNo +
+        _state.steamVeg8PieceNo +
+        _state.friedVeg7PieceNo +
+        _state.friedVeg4PieceNo +
+        _state.friedVeg8PieceNo;
+  }
+
+  // Get total chicken plates (steam + fried)
+  int getTotalChickenPlates() {
+    return _state.steamChicken7PieceNo +
+        _state.steamChicken4PieceNo +
+        _state.steamChicken8PieceNo +
+        _state.friedChicken7PieceNo +
+        _state.friedChicken4PieceNo +
+        _state.friedChicken8PieceNo;
+  }
+
+  // Get total steam plates
+  int getTotalSteamPlates() {
+    return _state.steamVeg7PieceNo +
+        _state.steamChicken7PieceNo +
+        _state.steamVeg4PieceNo +
+        _state.steamChicken4PieceNo +
+        _state.steamVeg8PieceNo +
+        _state.steamChicken8PieceNo;
+  }
+
+  // Get total fried plates
+  int getTotalFriedPlates() {
+    return _state.friedVeg7PieceNo +
+        _state.friedChicken7PieceNo +
+        _state.friedVeg4PieceNo +
+        _state.friedChicken4PieceNo +
+        _state.friedVeg8PieceNo +
+        _state.friedChicken8PieceNo;
+  }
+
+  // ===== PERSISTENCE METHODS - UPDATED FOR NEW STATE STRUCTURE =====
 
   Future<void> saveState() async {
     try {
@@ -264,41 +633,6 @@ class AppProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint('Error loading state: $e');
       // If loading fails, keep default state
-    }
-  }
-
-  // Get total plates for a specific size
-  int getTotalPlatesForSize(int plateSize) {
-    switch (plateSize) {
-      case 7:
-        return _state.veg7PieceNo + _state.chicken7PieceNo;
-      case 4:
-        return _state.veg4PieceNo + _state.chicken4PieceNo;
-      case 8:
-        return _state.veg8PieceNo + _state.chicken8PieceNo;
-      default:
-        return 0;
-    }
-  }
-
-  // Get total plates across all sizes
-  int getTotalPlatesAllSizes() {
-    return getTotalPlatesForSize(7) +
-        getTotalPlatesForSize(4) +
-        getTotalPlatesForSize(8);
-  }
-
-  // Get category totals across all plate sizes
-  int getCategoryTotal(String category) {
-    switch (category) {
-      case 'veg':
-        return _state.veg7PieceNo + _state.veg4PieceNo + _state.veg8PieceNo;
-      case 'chicken':
-        return _state.chicken7PieceNo +
-            _state.chicken4PieceNo +
-            _state.chicken8PieceNo;
-      default:
-        return 0;
     }
   }
 }

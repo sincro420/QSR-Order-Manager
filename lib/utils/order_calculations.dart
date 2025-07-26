@@ -1,6 +1,6 @@
 import '../constants/prices.dart';
 
-class Calculations {
+class OrderCalculations {
   /// Calculate the amount for 7-piece plates
   /// Formula: (plate_count * 7 / 8) * price_per_8_pieces
   static double calculate7PieceAmount(

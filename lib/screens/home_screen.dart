@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/app_state.dart';
 import '../providers/app_provider.dart';
+import '../models/app_state.dart';
 import '../widgets/home/category_column.dart';
+import '../widgets/home/order_analysis_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -10,67 +11,83 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Food Order Management')),
+      appBar: AppBar(title: const Text('Momo Counter'), centerTitle: true),
       body: Consumer<AppProvider>(
         builder: (context, appProvider, _) {
           final state = appProvider.state;
-
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Category Columns
+                // Steam section header
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 12.0),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: Text(
+                    'STEAM',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+
+                const SizedBox(height: 16.0),
+
+                // Steam categories row
                 Row(
                   children: [
-                    // VEG COLUMN
+                    // Steam Veg Column
                     Expanded(
                       child: CategoryColumn(
-                        category: 'veg',
-                        title: 'Veg',
-                        sevenPieceValue: state.veg7PieceNo,
-                        fourPieceValue: state.veg4PieceNo,
-                        eightPieceValue: state.veg8PieceNo,
+                        category: 'steam_veg',
+                        title: 'Steam Veg',
+                        sevenPieceValue: state.steamVeg7PieceNo,
+                        fourPieceValue: state.steamVeg4PieceNo,
+                        eightPieceValue: state.steamVeg8PieceNo,
                         onIncrementSevenPiece:
-                            () => appProvider.incrementSevenPiece('veg'),
+                            () => appProvider.incrementSteamVeg7Piece(),
                         onDecrementSevenPiece:
-                            () => appProvider.decrementSevenPiece('veg'),
+                            () => appProvider.decrementSteamVeg7Piece(),
                         onIncrementFourPiece:
-                            () => appProvider.incrementFourPiece('veg'), // NEW
+                            () => appProvider.incrementSteamVeg4Piece(),
                         onDecrementFourPiece:
-                            () => appProvider.decrementFourPiece('veg'), // NEW
+                            () => appProvider.decrementSteamVeg4Piece(),
                         onIncrementEightPiece:
-                            () => appProvider.incrementEightPiece('veg'),
+                            () => appProvider.incrementSteamVeg8Piece(),
                         onDecrementEightPiece:
-                            () => appProvider.decrementEightPiece('veg'),
+                            () => appProvider.decrementSteamVeg8Piece(),
                       ),
                     ),
-                    const SizedBox(width: 8.0),
 
-                    // CHICKEN COLUMN
+                    const SizedBox(width: 12.0),
+
+                    // Steam Chicken Column
                     Expanded(
                       child: CategoryColumn(
-                        category: 'chicken',
-                        title: 'Chicken',
-                        sevenPieceValue: state.chicken7PieceNo,
-                        fourPieceValue: state.chicken4PieceNo,
-                        eightPieceValue: state.chicken8PieceNo,
+                        category: 'steam_chicken',
+                        title: 'Steam Chicken',
+                        sevenPieceValue: state.steamChicken7PieceNo,
+                        fourPieceValue: state.steamChicken4PieceNo,
+                        eightPieceValue: state.steamChicken8PieceNo,
                         onIncrementSevenPiece:
-                            () => appProvider.incrementSevenPiece('chicken'),
+                            () => appProvider.incrementSteamChicken7Piece(),
                         onDecrementSevenPiece:
-                            () => appProvider.decrementSevenPiece('chicken'),
+                            () => appProvider.decrementSteamChicken7Piece(),
                         onIncrementFourPiece:
-                            () => appProvider.incrementFourPiece(
-                              'chicken',
-                            ), // NEW
+                            () => appProvider.incrementSteamChicken4Piece(),
                         onDecrementFourPiece:
-                            () => appProvider.decrementFourPiece(
-                              'chicken',
-                            ), // NEW
+                            () => appProvider.decrementSteamChicken4Piece(),
                         onIncrementEightPiece:
-                            () => appProvider.incrementEightPiece('chicken'),
+                            () => appProvider.incrementSteamChicken8Piece(),
                         onDecrementEightPiece:
-                            () => appProvider.decrementEightPiece('chicken'),
+                            () => appProvider.decrementSteamChicken8Piece(),
                       ),
                     ),
                   ],
@@ -78,8 +95,87 @@ class HomeScreen extends StatelessWidget {
 
                 const SizedBox(height: 24.0),
 
-                // Order Summary
-                buildSummary(state),
+                // Fried section header
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 12.0),
+                  decoration: BoxDecoration(
+                    color: Colors.orange.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: const Text(
+                    'FRIED',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.orange,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+
+                const SizedBox(height: 16.0),
+
+                // Fried categories row
+                Row(
+                  children: [
+                    // Fried Veg Column
+                    Expanded(
+                      child: CategoryColumn(
+                        category: 'fried_veg',
+                        title: 'Fried Veg',
+                        sevenPieceValue: state.friedVeg7PieceNo,
+                        fourPieceValue: state.friedVeg4PieceNo,
+                        eightPieceValue: state.friedVeg8PieceNo,
+                        onIncrementSevenPiece:
+                            () => appProvider.incrementFriedVeg7Piece(),
+                        onDecrementSevenPiece:
+                            () => appProvider.decrementFriedVeg7Piece(),
+                        onIncrementFourPiece:
+                            () => appProvider.incrementFriedVeg4Piece(),
+                        onDecrementFourPiece:
+                            () => appProvider.decrementFriedVeg4Piece(),
+                        onIncrementEightPiece:
+                            () => appProvider.incrementFriedVeg8Piece(),
+                        onDecrementEightPiece:
+                            () => appProvider.decrementFriedVeg8Piece(),
+                      ),
+                    ),
+
+                    const SizedBox(width: 12.0),
+
+                    // Fried Chicken Column
+                    Expanded(
+                      child: CategoryColumn(
+                        category: 'fried_chicken',
+                        title: 'Fried Chicken',
+                        sevenPieceValue: state.friedChicken7PieceNo,
+                        fourPieceValue: state.friedChicken4PieceNo,
+                        eightPieceValue: state.friedChicken8PieceNo,
+                        onIncrementSevenPiece:
+                            () => appProvider.incrementFriedChicken7Piece(),
+                        onDecrementSevenPiece:
+                            () => appProvider.decrementFriedChicken7Piece(),
+                        onIncrementFourPiece:
+                            () => appProvider.incrementFriedChicken4Piece(),
+                        onDecrementFourPiece:
+                            () => appProvider.decrementFriedChicken4Piece(),
+                        onIncrementEightPiece:
+                            () => appProvider.incrementFriedChicken8Piece(),
+                        onDecrementEightPiece:
+                            () => appProvider.decrementFriedChicken8Piece(),
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 32.0),
+
+                OrderAnalysisWidget(state: state),
+
+                const SizedBox(height: 20.0),
+
+                // Order Summary Section
+                buildOrderSummary(context, state),
               ],
             ),
           );
@@ -88,80 +184,162 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Build Summary Method
-  Widget buildSummary(AppState state) {
+  // Complete Order Summary Widget
+  Widget buildOrderSummary(BuildContext context, AppState state) {
     return Card(
+      elevation: 4.0,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Order Summary',
-              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            Row(
+              children: [
+                Icon(
+                  Icons.receipt_long,
+                  color: Theme.of(context).primaryColor,
+                  size: 24.0,
+                ),
+                const SizedBox(width: 8.0),
+                Text(
+                  'Order Summary',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+              ],
             ),
+
             const SizedBox(height: 16.0),
 
-            // 7-Piece Plates Section
-            buildSummaryRow('7-Piece Veg Plates', state.veg7PieceNo),
-            buildSummaryRow('7-Piece Chicken Plates', state.chicken7PieceNo),
+            // Steam Items Section
+            _buildSectionHeader('Steam Items', Icons.cloud, Colors.blue),
+            const SizedBox(height: 8.0),
 
-            const Divider(),
+            if (state.steamVeg7PieceNo > 0)
+              _buildSummaryRow('7-Piece Steam Veg', state.steamVeg7PieceNo),
+            if (state.steamChicken7PieceNo > 0)
+              _buildSummaryRow(
+                '7-Piece Steam Chicken',
+                state.steamChicken7PieceNo,
+              ),
+            if (state.steamVeg4PieceNo > 0)
+              _buildSummaryRow('4-Piece Steam Veg', state.steamVeg4PieceNo),
+            if (state.steamChicken4PieceNo > 0)
+              _buildSummaryRow(
+                '4-Piece Steam Chicken',
+                state.steamChicken4PieceNo,
+              ),
+            if (state.steamVeg8PieceNo > 0)
+              _buildSummaryRow('8-Piece Steam Veg', state.steamVeg8PieceNo),
+            if (state.steamChicken8PieceNo > 0)
+              _buildSummaryRow(
+                '8-Piece Steam Chicken',
+                state.steamChicken8PieceNo,
+              ),
 
-            // 4-Piece Plates Section
-            buildSummaryRow('4-Piece Veg Plates', state.veg4PieceNo),
-            buildSummaryRow('4-Piece Chicken Plates', state.chicken4PieceNo),
+            // Show steam total if any steam items exist
+            if (_getSteamTotal(state) > 0) ...[
+              const Divider(),
+              _buildSummaryRow(
+                'Steam Total',
+                _getSteamTotal(state),
+                isBold: true,
+                color: Colors.blue,
+              ),
+            ],
 
-            const Divider(),
+            const SizedBox(height: 16.0),
 
-            // 8-Piece Plates Section
-            buildSummaryRow('8-Piece Veg Plates', state.veg8PieceNo),
-            buildSummaryRow('8-Piece Chicken Plates', state.chicken8PieceNo),
+            // Fried Items Section
+            _buildSectionHeader(
+              'Fried Items',
+              Icons.local_fire_department,
+              Colors.orange,
+            ),
+            const SizedBox(height: 8.0),
 
-            const Divider(),
+            if (state.friedVeg7PieceNo > 0)
+              _buildSummaryRow('7-Piece Fried Veg', state.friedVeg7PieceNo),
+            if (state.friedChicken7PieceNo > 0)
+              _buildSummaryRow(
+                '7-Piece Fried Chicken',
+                state.friedChicken7PieceNo,
+              ),
+            if (state.friedVeg4PieceNo > 0)
+              _buildSummaryRow('4-Piece Fried Veg', state.friedVeg4PieceNo),
+            if (state.friedChicken4PieceNo > 0)
+              _buildSummaryRow(
+                '4-Piece Fried Chicken',
+                state.friedChicken4PieceNo,
+              ),
+            if (state.friedVeg8PieceNo > 0)
+              _buildSummaryRow('8-Piece Fried Veg', state.friedVeg8PieceNo),
+            if (state.friedChicken8PieceNo > 0)
+              _buildSummaryRow(
+                '8-Piece Fried Chicken',
+                state.friedChicken8PieceNo,
+              ),
 
-            // Totals Section
-            buildSummaryRow(
+            // Show fried total if any fried items exist
+            if (_getFriedTotal(state) > 0) ...[
+              const Divider(),
+              _buildSummaryRow(
+                'Fried Total',
+                _getFriedTotal(state),
+                isBold: true,
+                color: Colors.orange,
+              ),
+            ],
+
+            const SizedBox(height: 16.0),
+
+            // Combined Totals by Plate Size
+            _buildSectionHeader(
+              'Plate Size Totals',
+              Icons.analytics,
+              Colors.green,
+            ),
+            const SizedBox(height: 8.0),
+
+            _buildSummaryRow(
               'Total 7-Piece Plates',
-              state.veg7PieceNo + state.chicken7PieceNo,
+              state.steamVeg7PieceNo +
+                  state.steamChicken7PieceNo +
+                  state.friedVeg7PieceNo +
+                  state.friedChicken7PieceNo,
               isBold: true,
             ),
-            buildSummaryRow(
+
+            _buildSummaryRow(
               'Total 4-Piece Plates',
-              state.veg4PieceNo + state.chicken4PieceNo,
+              state.steamVeg4PieceNo +
+                  state.steamChicken4PieceNo +
+                  state.friedVeg4PieceNo +
+                  state.friedChicken4PieceNo,
               isBold: true,
             ),
-            buildSummaryRow(
+
+            _buildSummaryRow(
               'Total 8-Piece Plates',
-              state.veg8PieceNo + state.chicken8PieceNo,
+              state.steamVeg8PieceNo +
+                  state.steamChicken8PieceNo +
+                  state.friedVeg8PieceNo +
+                  state.friedChicken8PieceNo,
               isBold: true,
             ),
 
             const Divider(thickness: 2.0),
 
-            // Grand Totals
-            buildSummaryRow(
-              'Total All Plates',
-              (state.veg7PieceNo + state.chicken7PieceNo) + // 7-piece total
-                  (state.veg4PieceNo + state.chicken4PieceNo) + // 4-piece total
-                  (state.veg8PieceNo + state.chicken8PieceNo), // 8-piece total
+            // Grand Total
+            _buildSummaryRow(
+              'GRAND TOTAL',
+              _getGrandTotal(state),
               isBold: true,
               isGrandTotal: true,
-            ),
-
-            // Category totals
-            const SizedBox(height: 8.0),
-            buildSummaryRow(
-              'Total Veg Items',
-              state.veg7PieceNo + state.veg4PieceNo + state.veg8PieceNo,
-              isBold: true,
-            ),
-            buildSummaryRow(
-              'Total Chicken Items',
-              state.chicken7PieceNo +
-                  state.chicken4PieceNo +
-                  state.chicken8PieceNo,
-              isBold: true,
+              color: Colors.red,
             ),
           ],
         ),
@@ -169,49 +347,96 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Build Summary Row Method
-  Widget buildSummaryRow(
+  // Helper method to build section headers
+  Widget _buildSectionHeader(String title, IconData icon, Color color) {
+    return Row(
+      children: [
+        Icon(icon, color: color, size: 18.0),
+        const SizedBox(width: 6.0),
+        Text(
+          title,
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 16.0,
+            color: color,
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Helper method to build summary rows
+  Widget _buildSummaryRow(
     String label,
-    int value, {
+    int count, {
     bool isBold = false,
     bool isGrandTotal = false,
+    Color? color,
   }) {
+    if (count == 0 && !isGrandTotal) {
+      return const SizedBox.shrink(); // Don't show zero counts
+    }
+
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      padding: const EdgeInsets.symmetric(vertical: 2.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-              fontSize: isGrandTotal ? 16.0 : 14.0,
-              color: isGrandTotal ? Colors.blue : null,
+          Expanded(
+            child: Text(
+              label,
+              style: TextStyle(
+                fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+                fontSize: isGrandTotal ? 16.0 : 14.0,
+                color: color,
+              ),
             ),
           ),
           Container(
-            padding:
-                isGrandTotal
-                    ? const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0)
-                    : null,
-            decoration:
-                isGrandTotal
-                    ? BoxDecoration(
-                      color: Colors.blue.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(4.0),
-                    )
-                    : null,
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+            decoration: BoxDecoration(
+              color:
+                  isGrandTotal
+                      ? (color ?? Colors.red).withOpacity(0.1)
+                      : isBold
+                      ? (color ?? Colors.grey).withOpacity(0.1)
+                      : null,
+              borderRadius: BorderRadius.circular(4.0),
+            ),
             child: Text(
-              value.toString(),
+              count.toString(),
               style: TextStyle(
                 fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-                fontSize: isGrandTotal ? 18.0 : 14.0,
-                color: isGrandTotal ? Colors.blue : null,
+                fontSize: isGrandTotal ? 16.0 : 14.0,
+                color: color,
               ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  // Helper methods for calculating totals
+  int _getSteamTotal(AppState state) {
+    return state.steamVeg7PieceNo +
+        state.steamChicken7PieceNo +
+        state.steamVeg4PieceNo +
+        state.steamChicken4PieceNo +
+        state.steamVeg8PieceNo +
+        state.steamChicken8PieceNo;
+  }
+
+  int _getFriedTotal(AppState state) {
+    return state.friedVeg7PieceNo +
+        state.friedChicken7PieceNo +
+        state.friedVeg4PieceNo +
+        state.friedChicken4PieceNo +
+        state.friedVeg8PieceNo +
+        state.friedChicken8PieceNo;
+  }
+
+  int _getGrandTotal(AppState state) {
+    return _getSteamTotal(state) + _getFriedTotal(state);
   }
 }

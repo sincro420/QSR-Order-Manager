@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../utils/calculations.dart';
+import '../../utils/settlement_calculations.dart';
 import '../../constants/prices.dart';
 
 class CalculationWidget extends StatelessWidget {
@@ -60,11 +60,20 @@ class CalculationWidget extends StatelessWidget {
   double _calculateAmount() {
     switch (plateSize) {
       case 7:
-        return Calculations.calculate7PieceAmount(vegCount, chickenCount);
+        return SettlementCalculations.calculate7PieceAmount(
+          vegCount,
+          chickenCount,
+        );
       case 4:
-        return Calculations.calculate4PieceAmount(vegCount, chickenCount);
+        return SettlementCalculations.calculate4PieceAmount(
+          vegCount,
+          chickenCount,
+        );
       case 8:
-        return Calculations.calculate8PieceAmount(vegCount, chickenCount);
+        return SettlementCalculations.calculate8PieceAmount(
+          vegCount,
+          chickenCount,
+        );
       default:
         return 0.0;
     }
