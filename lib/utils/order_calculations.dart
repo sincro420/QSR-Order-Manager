@@ -1,184 +1,367 @@
-import '../constants/prices.dart';
+import '../constants/sale_prices.dart';
 
 class OrderCalculations {
-  /// Calculate the amount for 7-piece plates
-  /// Formula: (plate_count * 7 / 8) * price_per_8_pieces
+  // Steam plate pricing - individual methods using SalePrices
+  static double calculate7PieceSteamVegAmount(int count) {
+    return SalePrices.calculateSteamAmount(7, count);
+  }
+
+  static double calculate7PieceSteamChickenAmount(int count) {
+    return SalePrices.calculateSteamAmount(7, count);
+  }
+
+  static double calculate8PieceSteamVegAmount(int count) {
+    return SalePrices.calculateSteamAmount(8, count);
+  }
+
+  static double calculate8PieceSteamChickenAmount(int count) {
+    return SalePrices.calculateSteamAmount(8, count);
+  }
+
+  static double calculate4PieceSteamVegAmount(int count) {
+    return SalePrices.calculateSteamAmount(4, count);
+  }
+
+  static double calculate4PieceSteamChickenAmount(int count) {
+    return SalePrices.calculateSteamAmount(4, count);
+  }
+
+  // Fried plate pricing - individual methods using SalePrices
+  static double calculate7PieceFriedVegAmount(int count) {
+    return SalePrices.calculateFriedAmount(7, count);
+  }
+
+  static double calculate7PieceFriedChickenAmount(int count) {
+    return SalePrices.calculateFriedAmount(7, count);
+  }
+
+  static double calculate8PieceFriedVegAmount(int count) {
+    return SalePrices.calculateFriedAmount(8, count);
+  }
+
+  static double calculate8PieceFriedChickenAmount(int count) {
+    return SalePrices.calculateFriedAmount(8, count);
+  }
+
+  static double calculate4PieceFriedVegAmount(int count) {
+    return SalePrices.calculateFriedAmount(4, count);
+  }
+
+  static double calculate4PieceFriedChickenAmount(int count) {
+    return SalePrices.calculateFriedAmount(4, count);
+  }
+
+  // Combined calculations by plate size using SalePrices
   static double calculate7PieceAmount(
-    int vegCount,
-    int chickenCount,
-    // REMOVED: int paneerCount
+    int steamVegCount,
+    int steamChickenCount,
+    int friedVegCount,
+    int friedChickenCount,
   ) {
-    double vegAmount = (vegCount * 7 / 8) * Prices.VEG_PRICE;
-    double chickenAmount = (chickenCount * 7 / 8) * Prices.CHICKEN_PRICE;
-    // REMOVED: double paneerAmount = (paneerCount * 7 / 8) * Prices.PANEER_PRICE;
-
-    return vegAmount + chickenAmount;
+    double steamAmount = SalePrices.calculateSteamAmount(
+      7,
+      steamVegCount + steamChickenCount,
+    );
+    double friedAmount = SalePrices.calculateFriedAmount(
+      7,
+      friedVegCount + friedChickenCount,
+    );
+    return steamAmount + friedAmount;
   }
 
-  /// Calculate the amount for 4-piece plates
-  /// Formula: veg = count * 15 (30/2), chicken = count * 17.5 (35/2)
-  static double calculate4PieceAmount(int vegCount, int chickenCount) {
-    double vegAmount = vegCount * 15.0; // 30/2 = 15
-    double chickenAmount = chickenCount * 17.5; // 35/2 = 17.5
-
-    return vegAmount + chickenAmount;
+  static double calculate4PieceAmount(
+    int steamVegCount,
+    int steamChickenCount,
+    int friedVegCount,
+    int friedChickenCount,
+  ) {
+    double steamAmount = SalePrices.calculateSteamAmount(
+      4,
+      steamVegCount + steamChickenCount,
+    );
+    double friedAmount = SalePrices.calculateFriedAmount(
+      4,
+      friedVegCount + friedChickenCount,
+    );
+    return steamAmount + friedAmount;
   }
 
-  /// Calculate the amount for 8-piece plates
-  /// Formula: plate_count * price_per_8_pieces
-  static double calculate8PieceAmount(int vegCount, int chickenCount) {
-    double vegAmount = vegCount * Prices.VEG_PRICE;
-    double chickenAmount = chickenCount * Prices.CHICKEN_PRICE;
-
-    return vegAmount + chickenAmount;
+  static double calculate8PieceAmount(
+    int steamVegCount,
+    int steamChickenCount,
+    int friedVegCount,
+    int friedChickenCount,
+  ) {
+    double steamAmount = SalePrices.calculateSteamAmount(
+      8,
+      steamVegCount + steamChickenCount,
+    );
+    double friedAmount = SalePrices.calculateFriedAmount(
+      8,
+      friedVegCount + friedChickenCount,
+    );
+    return steamAmount + friedAmount;
   }
 
-  /// Calculate the total amount across all plate sizes
-  /// Now includes 4-piece plates
+  // Total calculations for steam category using SalePrices
+  static double calculateSteamVegTotal(
+    int count7Piece,
+    int count4Piece,
+    int count8Piece,
+  ) {
+    return SalePrices.calculateSteamAmount(7, count7Piece) +
+        SalePrices.calculateSteamAmount(4, count4Piece) +
+        SalePrices.calculateSteamAmount(8, count8Piece);
+  }
+
+  static double calculateSteamChickenTotal(
+    int count7Piece,
+    int count4Piece,
+    int count8Piece,
+  ) {
+    return SalePrices.calculateSteamAmount(7, count7Piece) +
+        SalePrices.calculateSteamAmount(4, count4Piece) +
+        SalePrices.calculateSteamAmount(8, count8Piece);
+  }
+
+  static double calculateSteamTotal(
+    int veg7Count,
+    int veg4Count,
+    int veg8Count,
+    int chicken7Count,
+    int chicken4Count,
+    int chicken8Count,
+  ) {
+    return calculateSteamVegTotal(veg7Count, veg4Count, veg8Count) +
+        calculateSteamChickenTotal(chicken7Count, chicken4Count, chicken8Count);
+  }
+
+  // Total calculations for fried category using SalePrices
+  static double calculateFriedVegTotal(
+    int count7Piece,
+    int count4Piece,
+    int count8Piece,
+  ) {
+    return SalePrices.calculateFriedAmount(7, count7Piece) +
+        SalePrices.calculateFriedAmount(4, count4Piece) +
+        SalePrices.calculateFriedAmount(8, count8Piece);
+  }
+
+  static double calculateFriedChickenTotal(
+    int count7Piece,
+    int count4Piece,
+    int count8Piece,
+  ) {
+    return SalePrices.calculateFriedAmount(7, count7Piece) +
+        SalePrices.calculateFriedAmount(4, count4Piece) +
+        SalePrices.calculateFriedAmount(8, count8Piece);
+  }
+
+  static double calculateFriedTotal(
+    int veg7Count,
+    int veg4Count,
+    int veg8Count,
+    int chicken7Count,
+    int chicken4Count,
+    int chicken8Count,
+  ) {
+    return calculateFriedVegTotal(veg7Count, veg4Count, veg8Count) +
+        calculateFriedChickenTotal(chicken7Count, chicken4Count, chicken8Count);
+  }
+
+  // Grand total calculation using SalePrices
   static double calculateTotalAmount(
+    int steamVeg7Count,
+    int steamChicken7Count,
+    int friedVeg7Count,
+    int friedChicken7Count,
+    int steamVeg4Count,
+    int steamChicken4Count,
+    int friedVeg4Count,
+    int friedChicken4Count,
+    int steamVeg8Count,
+    int steamChicken8Count,
+    int friedVeg8Count,
+    int friedChicken8Count,
+  ) {
+    double steamTotal = calculateSteamTotal(
+      steamVeg7Count,
+      steamVeg4Count,
+      steamVeg8Count,
+      steamChicken7Count,
+      steamChicken4Count,
+      steamChicken8Count,
+    );
+
+    double friedTotal = calculateFriedTotal(
+      friedVeg7Count,
+      friedVeg4Count,
+      friedVeg8Count,
+      friedChicken7Count,
+      friedChicken4Count,
+      friedChicken8Count,
+    );
+
+    return steamTotal + friedTotal;
+  }
+
+  // Plate count calculations (regular count)
+  static int getTotalSteamPlates(
     int veg7Count,
-    int chicken7Count,
     int veg4Count,
-    int chicken4Count,
     int veg8Count,
-    int chicken8Count,
-  ) {
-    double amount7Piece = calculate7PieceAmount(veg7Count, chicken7Count);
-
-    double amount4Piece = calculate4PieceAmount(veg4Count, chicken4Count);
-
-    double amount8Piece = calculate8PieceAmount(veg8Count, chicken8Count);
-
-    return amount7Piece + amount4Piece + amount8Piece;
-  }
-
-  /// Calculate total amount for veg items across all plate sizes
-  static double calculateVegTotal(int veg7Count, int veg4Count, int veg8Count) {
-    double veg7Amount = (veg7Count * 7 / 8) * Prices.VEG_PRICE;
-    double veg4Amount = veg4Count * 15.0;
-    double veg8Amount = veg8Count * Prices.VEG_PRICE;
-
-    return veg7Amount + veg4Amount + veg8Amount;
-  }
-
-  /// Calculate total amount for chicken items across all plate sizes
-  static double calculateChickenTotal(
     int chicken7Count,
     int chicken4Count,
     int chicken8Count,
   ) {
-    double chicken7Amount = (chicken7Count * 7 / 8) * Prices.CHICKEN_PRICE;
-    double chicken4Amount = chicken4Count * 17.5;
-    double chicken8Amount = chicken8Count * Prices.CHICKEN_PRICE;
-
-    return chicken7Amount + chicken4Amount + chicken8Amount;
+    return veg7Count +
+        veg4Count +
+        veg8Count +
+        chicken7Count +
+        chicken4Count +
+        chicken8Count;
   }
 
-  /// Get total plates for a specific size across all categories
-  static int getTotalPlatesForSize(
-    int plateSize,
-    int vegCount,
-    int chickenCount,
+  static int getTotalFriedPlates(
+    int veg7Count,
+    int veg4Count,
+    int veg8Count,
+    int chicken7Count,
+    int chicken4Count,
+    int chicken8Count,
   ) {
-    return vegCount + chickenCount;
+    return veg7Count +
+        veg4Count +
+        veg8Count +
+        chicken7Count +
+        chicken4Count +
+        chicken8Count;
   }
 
-  /// Get total count of all plates across all sizes and categories
   static int getTotalAllPlates(
+    int steamVeg7Count,
+    int steamChicken7Count,
+    int friedVeg7Count,
+    int friedChicken7Count,
+    int steamVeg4Count,
+    int steamChicken4Count,
+    int friedVeg4Count,
+    int friedChicken4Count,
+    int steamVeg8Count,
+    int steamChicken8Count,
+    int friedVeg8Count,
+    int friedChicken8Count,
+  ) {
+    return getTotalSteamPlates(
+          steamVeg7Count,
+          steamVeg4Count,
+          steamVeg8Count,
+          steamChicken7Count,
+          steamChicken4Count,
+          steamChicken8Count,
+        ) +
+        getTotalFriedPlates(
+          friedVeg7Count,
+          friedVeg4Count,
+          friedVeg8Count,
+          friedChicken7Count,
+          friedChicken4Count,
+          friedChicken8Count,
+        );
+  }
+
+  // Plate count with 4-piece plates counted as 0.5
+  static double getTotalSteamPlatesWithHalfCount(
     int veg7Count,
-    int chicken7Count,
     int veg4Count,
-    int chicken4Count,
     int veg8Count,
+    int chicken7Count,
+    int chicken4Count,
     int chicken8Count,
   ) {
-    int total7Piece = getTotalPlatesForSize(7, veg7Count, chicken7Count);
-    int total4Piece = getTotalPlatesForSize(4, veg4Count, chicken4Count);
-    int total8Piece = getTotalPlatesForSize(8, veg8Count, chicken8Count);
-
-    return total7Piece + total4Piece + total8Piece;
+    int fullPlates = veg7Count + veg8Count + chicken7Count + chicken8Count;
+    int halfPlates = veg4Count + chicken4Count;
+    return fullPlates + (halfPlates * 0.5);
   }
 
-  /// Get the calculation formula as a string for display purposes
-  static String getFormulaForPlateSize(int plateSize) {
-    switch (plateSize) {
-      case 7:
-        return 'Total Momos ÷ 8 × Price per 8-piece';
-      case 4:
-        return 'Veg: ₹15 per plate, Chicken: ₹17.5 per plate';
-      case 8:
-        return 'Veg: ₹30 per 8-piece, Chicken: ₹35 per 8-piece';
-      default:
-        return 'Unknown plate size';
-    }
-  }
-
-  /// Get the per-piece rate for a specific category and plate size
-  static double getPerPieceRate(String category, int plateSize) {
-    switch (plateSize) {
-      case 7:
-        // 7-piece plates are calculated as (count * 7/8) * 8-piece price
-        // So per piece = (7/8) * 8-piece price / 7 = 8-piece price / 8
-        switch (category) {
-          case 'veg':
-            return Prices.VEG_PRICE / 8;
-          case 'chicken':
-            return Prices.CHICKEN_PRICE / 8;
-          default:
-            return 0.0;
-        }
-      case 4:
-        switch (category) {
-          case 'veg':
-            return 15.0 / 4; // ₹15 per 4-piece plate = ₹3.75 per piece
-          case 'chicken':
-            return 17.5 / 4; // ₹17.5 per 4-piece plate = ₹4.375 per piece
-          default:
-            return 0.0;
-        }
-      case 8:
-        switch (category) {
-          case 'veg':
-            return Prices.VEG_PRICE / 8;
-          case 'chicken':
-            return Prices.CHICKEN_PRICE / 8;
-          default:
-            return 0.0;
-        }
-      default:
-        return 0.0;
-    }
-  }
-
-  /// Validate that plate counts are non-negative
-  static bool validatePlateCounts(List<int> counts) {
-    return counts.every((count) => count >= 0);
-  }
-
-  /// Calculate savings/difference between different plate combinations
-  static double calculateSavings(
-    int originalVeg8,
-    int originalChicken8,
-    int newVeg7,
-    int newChicken7,
-    int newVeg4,
-    int newChicken4,
-    int newVeg8,
-    int newChicken8,
+  static double getTotalFriedPlatesWithHalfCount(
+    int veg7Count,
+    int veg4Count,
+    int veg8Count,
+    int chicken7Count,
+    int chicken4Count,
+    int chicken8Count,
   ) {
-    double originalAmount = calculate8PieceAmount(
-      originalVeg8,
-      originalChicken8,
-    );
-    double newAmount = calculateTotalAmount(
-      newVeg7,
-      newChicken7,
-      newVeg4,
-      newChicken4,
-      newVeg8,
-      newChicken8,
-    );
+    int fullPlates = veg7Count + veg8Count + chicken7Count + chicken8Count;
+    int halfPlates = veg4Count + chicken4Count;
+    return fullPlates + (halfPlates * 0.5);
+  }
 
-    return originalAmount - newAmount;
+  static double getTotalAllPlatesWithHalfCount(
+    int steamVeg7Count,
+    int steamChicken7Count,
+    int friedVeg7Count,
+    int friedChicken7Count,
+    int steamVeg4Count,
+    int steamChicken4Count,
+    int friedVeg4Count,
+    int friedChicken4Count,
+    int steamVeg8Count,
+    int steamChicken8Count,
+    int friedVeg8Count,
+    int friedChicken8Count,
+  ) {
+    return getTotalSteamPlatesWithHalfCount(
+          steamVeg7Count,
+          steamVeg4Count,
+          steamVeg8Count,
+          steamChicken7Count,
+          steamChicken4Count,
+          steamChicken8Count,
+        ) +
+        getTotalFriedPlatesWithHalfCount(
+          friedVeg7Count,
+          friedVeg4Count,
+          friedVeg8Count,
+          friedChicken7Count,
+          friedChicken4Count,
+          friedChicken8Count,
+        );
+  }
+
+  // Savings calculations (using original prices from your existing code)
+  static double calculateVegSavings(int count) {
+    // You'll need to import your original PRICES constant for this calculation
+    // Placeholder implementation - adjust based on your original prices.dart
+    return 0.0; // Implement based on your existing PRICES constant
+  }
+
+  static double calculateChickenSavings(int count) {
+    // You'll need to import your original PRICES constant for this calculation
+    // Placeholder implementation - adjust based on your original prices.dart
+    return 0.0; // Implement based on your existing PRICES constant
+  }
+
+  static double calculateTotalSavings(int vegCount, int chickenCount) {
+    return calculateVegSavings(vegCount) +
+        calculateChickenSavings(chickenCount);
+  }
+
+  // Utility methods for formatting
+  static String formatAmount(double amount) {
+    return SalePrices.formatPrice(amount);
+  }
+
+  static String formatPlateCount(double count) {
+    return count % 1 == 0 ? count.toInt().toString() : count.toStringAsFixed(1);
+  }
+
+  // Additional utility methods for easy price access
+  static double getPlatePrice(String cookingMethod, int plateSize) {
+    return SalePrices.getPrice(cookingMethod, plateSize);
+  }
+
+  static double getPriceDifference(int plateSize) {
+    return SalePrices.getPriceDifference(plateSize);
   }
 }

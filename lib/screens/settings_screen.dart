@@ -73,7 +73,7 @@ class SettingsScreen extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 4.0),
-            const Text('Version 1.1.0'),
+            const Text('Version 1.5.0'),
             const SizedBox(height: 16.0),
             const Text(
               'This application helps track food orders and calculate settlement amounts for suppliers.',

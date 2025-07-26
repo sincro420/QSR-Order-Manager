@@ -11,7 +11,7 @@ class SettlementScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Settlement'), centerTitle: true),
+      appBar: AppBar(title: const Text('Settlement')),
       body: Consumer<AppProvider>(
         builder: (context, appProvider, _) {
           final state = appProvider.state;
