@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../utils/order_calculations.dart';
-import '../../models/app_state.dart';
-import '../../constants/sale_prices.dart';
+import '../../../utils/order_calculations.dart';
+import '../../../models/app_state.dart';
+import '../../../constants/sale_prices.dart';
 
 class OrderAnalysisWidget extends StatelessWidget {
   final AppState state;
@@ -14,59 +14,63 @@ class OrderAnalysisWidget extends StatelessWidget {
       elevation: 4.0,
       margin: const EdgeInsets.all(8.0),
       child: Padding(
-        padding: const EdgeInsets.all(16.0), // FIXED: Added parentheses
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header
-            Row(
-              children: [
-                Icon(
-                  Icons.analytics,
-                  color: Theme.of(context).primaryColor,
-                  size: 24.0,
-                ),
-                const SizedBox(width: 8.0),
-                Text(
-                  'Order Analysis',
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                ),
-              ],
-            ),
-
+            buildHeader(context),
             const SizedBox(height: 16.0),
-
             // Quick Summary Cards
-            _buildQuickSummaryCards(),
-
+            buildQuickSummaryCards(context),
             const SizedBox(height: 16.0),
             const Divider(thickness: 1.0),
-
             // Detailed Breakdown
-            _buildDetailedBreakdown(),
-
+            buildDetailedBreakdown(context),
             const SizedBox(height: 12.0),
             const Divider(thickness: 1.0),
-
             // Plate Size Analysis
-            _buildPlateSizeAnalysis(),
-
+            buildPlateSizeAnalysis(context),
             const SizedBox(height: 12.0),
             const Divider(thickness: 1.0),
-
             // Grand Totals
-            _buildGrandTotals(),
+            buildGrandTotals(context),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildQuickSummaryCards() {
+  // Header Section - Enhanced with BuildContext parameter
+  Widget buildHeader(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Row(
+      children: [
+        Icon(
+          Icons.analytics,
+          color:
+              isDark ? const Color(0xFF60A5FA) : Theme.of(context).primaryColor,
+          size: 24.0,
+        ),
+        const SizedBox(width: 8.0),
+        Text(
+          'Order Analysis',
+          style: TextStyle(
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+            color:
+                isDark
+                    ? const Color(0xFF60A5FA)
+                    : Theme.of(context).primaryColor,
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Quick Summary Cards - Enhanced with BuildContext parameter
+  Widget buildQuickSummaryCards(BuildContext context) {
     double totalPlatesWithHalf =
         OrderCalculations.getTotalAllPlatesWithHalfCount(
           state.steamVeg7PieceNo,
@@ -101,7 +105,8 @@ class OrderAnalysisWidget extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: _buildSummaryCard(
+          child: buildSummaryCard(
+            context,
             'Total Plates',
             OrderCalculations.formatPlateCount(totalPlatesWithHalf),
             Icons.restaurant_menu,
@@ -110,7 +115,8 @@ class OrderAnalysisWidget extends StatelessWidget {
         ),
         const SizedBox(width: 12.0),
         Expanded(
-          child: _buildSummaryCard(
+          child: buildSummaryCard(
+            context,
             'Total Amount',
             SalePrices.formatPrice(totalAmount),
             Icons.currency_rupee,
@@ -121,28 +127,52 @@ class OrderAnalysisWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildSummaryCard(
+  // Summary Card - Enhanced with improved dark mode colors
+  Widget buildSummaryCard(
+    BuildContext context,
     String title,
     String value,
     IconData icon,
     Color color,
   ) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    // Enhanced color mapping for dark mode
+    Color getEnhancedColor(Color originalColor) {
+      if (originalColor == Colors.blue) {
+        return isDark ? const Color(0xFF60A5FA) : Colors.blue;
+      } else if (originalColor == Colors.green) {
+        return isDark ? const Color(0xFF4ADE80) : Colors.green;
+      } else if (originalColor == Colors.orange) {
+        return isDark ? const Color(0xFFFB923C) : Colors.orange;
+      } else if (originalColor == Colors.red) {
+        return isDark ? const Color(0xFFEF4444) : Colors.red;
+      }
+      return originalColor;
+    }
+
+    final enhancedColor = getEnhancedColor(color);
+
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color:
+            isDark ? enhancedColor.withOpacity(0.15) : color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(8.0),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(
+          color:
+              isDark ? enhancedColor.withOpacity(0.4) : color.withOpacity(0.3),
+        ),
       ),
       child: Column(
         children: [
-          Icon(icon, color: color, size: 28.0),
+          Icon(icon, color: enhancedColor, size: 28.0),
           const SizedBox(height: 8.0),
           Text(
             title,
             style: TextStyle(
               fontSize: 12.0,
-              color: color.withOpacity(0.8),
+              color: enhancedColor.withOpacity(0.8),
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -152,7 +182,7 @@ class OrderAnalysisWidget extends StatelessWidget {
             style: TextStyle(
               fontSize: 18.0,
               fontWeight: FontWeight.bold,
-              color: color,
+              color: enhancedColor,
             ),
           ),
         ],
@@ -160,7 +190,10 @@ class OrderAnalysisWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailedBreakdown() {
+  // Detailed Breakdown - Enhanced with BuildContext parameter
+  Widget buildDetailedBreakdown(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -169,22 +202,27 @@ class OrderAnalysisWidget extends StatelessWidget {
           style: TextStyle(
             fontSize: 16.0,
             fontWeight: FontWeight.bold,
-            color: Colors.grey[700],
+            color: isDark ? Colors.grey.shade300 : Colors.grey.shade700,
           ),
         ),
         const SizedBox(height: 12.0),
-
         // Steam Category
-        _buildCategoryBreakdown('Steam', true),
+        buildCategoryBreakdown(context, 'Steam', true),
         const SizedBox(height: 12.0),
-
         // Fried Category
-        _buildCategoryBreakdown('Fried', false),
+        buildCategoryBreakdown(context, 'Fried', false),
       ],
     );
   }
 
-  Widget _buildCategoryBreakdown(String category, bool isSteam) {
+  // Category Breakdown - Enhanced with improved dark mode colors
+  Widget buildCategoryBreakdown(
+    BuildContext context,
+    String category,
+    bool isSteam,
+  ) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     double categoryTotal;
     double categoryPlatesWithHalf;
     Color categoryColor;
@@ -231,14 +269,27 @@ class OrderAnalysisWidget extends StatelessWidget {
 
     if (categoryTotal == 0) return const SizedBox.shrink();
 
+    // Enhanced color mapping
+    Color getEnhancedColor(Color originalColor) {
+      if (originalColor == Colors.blue) {
+        return isDark ? const Color(0xFF60A5FA) : Colors.blue;
+      } else if (originalColor == Colors.orange) {
+        return isDark ? const Color(0xFFFB923C) : Colors.orange;
+      }
+      return originalColor;
+    }
+
+    final enhancedColor = getEnhancedColor(categoryColor);
+
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
-        color: categoryColor.withOpacity(0.05),
+        color:
+            isDark
+                ? enhancedColor.withOpacity(0.1)
+                : categoryColor.withOpacity(0.05),
         borderRadius: BorderRadius.circular(6.0),
-        border: Border(
-          left: BorderSide(color: categoryColor, width: 4.0),
-        ), // FIXED: Proper Border syntax
+        border: Border(left: BorderSide(color: enhancedColor, width: 4.0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -251,7 +302,7 @@ class OrderAnalysisWidget extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 14.0,
                   fontWeight: FontWeight.bold,
-                  color: categoryColor,
+                  color: enhancedColor,
                 ),
               ),
               Text(
@@ -259,7 +310,7 @@ class OrderAnalysisWidget extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 14.0,
                   fontWeight: FontWeight.bold,
-                  color: categoryColor,
+                  color: enhancedColor,
                 ),
               ),
             ],
@@ -269,7 +320,7 @@ class OrderAnalysisWidget extends StatelessWidget {
             'Plates: ${OrderCalculations.formatPlateCount(categoryPlatesWithHalf)}',
             style: TextStyle(
               fontSize: 12.0,
-              color: categoryColor.withOpacity(0.8),
+              color: enhancedColor.withOpacity(0.8),
             ),
           ),
         ],
@@ -277,7 +328,10 @@ class OrderAnalysisWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildPlateSizeAnalysis() {
+  // Plate Size Analysis - Enhanced with BuildContext parameter
+  Widget buildPlateSizeAnalysis(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -286,26 +340,26 @@ class OrderAnalysisWidget extends StatelessWidget {
           style: TextStyle(
             fontSize: 16.0,
             fontWeight: FontWeight.bold,
-            color: Colors.grey[700],
+            color: isDark ? Colors.grey.shade300 : Colors.grey.shade700,
           ),
         ),
         const SizedBox(height: 12.0),
-
         // 7-Piece Analysis
-        _buildPlateSizeRow(7),
+        buildPlateSizeRow(context, 7),
         const SizedBox(height: 8.0),
-
         // 4-Piece Analysis
-        _buildPlateSizeRow(4),
+        buildPlateSizeRow(context, 4),
         const SizedBox(height: 8.0),
-
         // 8-Piece Analysis
-        _buildPlateSizeRow(8),
+        buildPlateSizeRow(context, 8),
       ],
     );
   }
 
-  Widget _buildPlateSizeRow(int plateSize) {
+  // Plate Size Row - Enhanced with BuildContext parameter and improved colors
+  Widget buildPlateSizeRow(BuildContext context, int plateSize) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     int steamCount, friedCount;
     double amount;
     double plateCount;
@@ -334,7 +388,7 @@ class OrderAnalysisWidget extends StatelessWidget {
         plateCount = (steamCount + friedCount) * 0.5; // 4-piece as 0.5
         break;
       case 8:
-      default: // FIXED: Added default case
+      default:
         steamCount = state.steamVeg8PieceNo + state.steamChicken8PieceNo;
         friedCount = state.friedVeg8PieceNo + state.friedChicken8PieceNo;
         amount = OrderCalculations.calculate8PieceAmount(
@@ -350,46 +404,59 @@ class OrderAnalysisWidget extends StatelessWidget {
     int totalCount = steamCount + friedCount;
     if (totalCount == 0) return const SizedBox.shrink();
 
-    return Row(
-      children: [
-        Expanded(
-          flex: 2,
-          child: Text(
-            '$plateSize-Piece',
-            style: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500),
-          ),
-        ),
-        Expanded(
-          flex: 2,
-          child: Text(
-            'Count: $totalCount',
-            style: const TextStyle(fontSize: 12.0),
-          ),
-        ),
-        Expanded(
-          flex: 2,
-          child: Text(
-            'Plates: ${OrderCalculations.formatPlateCount(plateCount)}',
-            style: TextStyle(
-              fontSize: 12.0,
-              color: plateSize == 4 ? Colors.orange : Colors.grey[600],
-              fontWeight: plateSize == 4 ? FontWeight.w500 : FontWeight.normal,
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 8.0),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 2,
+            child: Text(
+              '$plateSize-Piece',
+              style: const TextStyle(
+                fontSize: 14.0,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
-        ),
-        Expanded(
-          flex: 2,
-          child: Text(
-            SalePrices.formatPrice(amount),
-            style: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w500),
-            textAlign: TextAlign.right,
+          Expanded(
+            flex: 2,
+            child: Text(
+              'Count: $totalCount',
+              style: const TextStyle(fontSize: 12.0),
+            ),
           ),
-        ),
-      ],
+          Expanded(
+            flex: 2,
+            child: Text(
+              'Plates: ${OrderCalculations.formatPlateCount(plateCount)}',
+              style: TextStyle(
+                fontSize: 12.0,
+                color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
+                fontWeight:
+                    plateSize == 4 ? FontWeight.w500 : FontWeight.normal,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Text(
+              SalePrices.formatPrice(amount),
+              style: const TextStyle(
+                fontSize: 12.0,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.right,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _buildGrandTotals() {
+  // Grand Totals - Enhanced with improved dark mode colors
+  Widget buildGrandTotals(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     double totalPlatesWithHalf =
         OrderCalculations.getTotalAllPlatesWithHalfCount(
           state.steamVeg7PieceNo,
@@ -424,9 +491,17 @@ class OrderAnalysisWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
-        color: Colors.greenAccent.withOpacity(0.1),
+        color:
+            isDark
+                ? const Color(0xFF4ADE80).withOpacity(0.15)
+                : Colors.greenAccent.withOpacity(0.1),
         borderRadius: BorderRadius.circular(8.0),
-        border: Border.all(color: Colors.lightGreen.withOpacity(0.3)),
+        border: Border.all(
+          color:
+              isDark
+                  ? const Color(0xFF4ADE80).withOpacity(0.4)
+                  : Colors.lightGreen.withOpacity(0.3),
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -434,29 +509,50 @@ class OrderAnalysisWidget extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'GRAND TOTAL',
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
-                  color: Colors.green,
+                  color: isDark ? const Color(0xFF4ADE80) : Colors.green,
                 ),
               ),
               Text(
                 'Total Plates: ${OrderCalculations.formatPlateCount(totalPlatesWithHalf)}',
                 style: TextStyle(
                   fontSize: 12.0,
-                  color: Colors.green.withOpacity(0.8),
+                  color:
+                      isDark
+                          ? const Color(0xFF4ADE80).withOpacity(0.8)
+                          : Colors.green.withOpacity(0.8),
                 ),
               ),
             ],
           ),
-          Text(
-            SalePrices.formatPrice(totalAmount),
-            style: const TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-              color: Colors.green,
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 8.0,
+            ),
+            decoration: BoxDecoration(
+              color: isDark ? const Color(0xFF4ADE80) : Colors.green,
+              borderRadius: BorderRadius.circular(20.0),
+              boxShadow: [
+                BoxShadow(
+                  color: (isDark ? const Color(0xFF4ADE80) : Colors.green)
+                      .withOpacity(0.3),
+                  blurRadius: 6.0,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Text(
+              SalePrices.formatPrice(totalAmount),
+              style: const TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
           ),
         ],

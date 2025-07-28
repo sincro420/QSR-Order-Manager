@@ -59,6 +59,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+<<<<<<< HEAD
       body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed, // Add this line
@@ -67,6 +68,65 @@ class _MainScreenState extends State<MainScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.calculate),
             label: 'Settlement',
+=======
+      body: IndexedStack(index: _selectedIndex, children: _screens),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _navigateToHome,
+        backgroundColor:
+            _selectedIndex == 0
+                ? Colors.purple
+                : Colors.purple.withOpacity(0.8),
+        elevation: 2.0,
+        child: Icon(
+          Icons.memory_sharp,
+          color: _selectedIndex == 0 ? Colors.white : Colors.white70,
+        ),
+      ),
+
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 8.0,
+        child: SizedBox(
+          height: 60,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              IconButton(
+                icon: Icon(
+                  Icons.history,
+                  color: _selectedIndex == 1 ? Colors.purple : Colors.grey,
+                ),
+                onPressed: () => _onItemTapped(1),
+                tooltip: 'History',
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.calculate_rounded,
+                  color: _selectedIndex == 2 ? Colors.purple : Colors.grey,
+                ),
+                onPressed: () => _onItemTapped(2),
+                tooltip: 'Settlement',
+              ),
+              const SizedBox(width: 48), // Space for the notch/FAB
+              IconButton(
+                icon: Icon(
+                  Icons.receipt_long,
+                  color: _selectedIndex == 3 ? Colors.purple : Colors.grey,
+                ),
+                onPressed: () => _onItemTapped(3),
+                tooltip: 'Accounting',
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.settings,
+                  color: _selectedIndex == 4 ? Colors.purple : Colors.grey,
+                ),
+                onPressed: () => _onItemTapped(4),
+                tooltip: 'Settings',
+              ),
+            ],
+>>>>>>> 9a7e88c (Realtime DB and Accounting screen added with better darkmode)
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_month),

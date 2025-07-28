@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../utils/settlement_calculations.dart';
-import '../../constants/prices.dart';
+import '../../../utils/settlement_calculations.dart';
+import '../../../constants/prices.dart';
 
 class CalculationWidget extends StatelessWidget {
   final String title;
@@ -19,7 +19,7 @@ class CalculationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Calculate Amount
-    final double amount = _calculateAmount();
+    final double amount = calculateAmount();
     final int totalPlates = vegCount + chickenCount;
 
     return Card(
@@ -30,26 +30,20 @@ class CalculationWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // =============================================================================
             // HEADER SECTION
-            // =============================================================================
-            buildHeader(),
+            buildHeader(context),
             const SizedBox(height: 16.0),
-
             // Counts Display
-            buildCountsSection(),
+            buildCountsSection(context),
             const SizedBox(height: 16.0),
-
             // Calculation Breakdown
-            buildCalculationBreakdown(),
+            buildCalculationBreakdown(context),
             const SizedBox(height: 16.0),
-
             // Formula Display
-            buildFormulaSection(),
+            buildFormulaSection(context),
             const SizedBox(height: 16.0),
-
             // Total Amount
-            buildTotalSection(amount, totalPlates),
+            buildTotalSection(context, amount, totalPlates),
           ],
         ),
       ),
@@ -57,7 +51,7 @@ class CalculationWidget extends StatelessWidget {
   }
 
   // Calculate Amount
-  double _calculateAmount() {
+  double calculateAmount() {
     switch (plateSize) {
       case 7:
         return SettlementCalculations.calculate7PieceAmount(
@@ -79,8 +73,8 @@ class CalculationWidget extends StatelessWidget {
     }
   }
 
-  // Header Section
-  Widget buildHeader() {
+  // Header Section - Updated with BuildContext parameter
+  Widget buildHeader(BuildContext context) {
     IconData plateIcon;
     Color plateColor;
 
@@ -102,15 +96,33 @@ class CalculationWidget extends StatelessWidget {
         plateColor = Colors.grey;
     }
 
+    // Enhanced color for dark mode
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    Color getEnhancedColor(Color originalColor) {
+      if (originalColor == Colors.blue) {
+        return isDark ? const Color(0xFF60A5FA) : Colors.blue;
+      } else if (originalColor == Colors.green) {
+        return isDark ? const Color(0xFF4ADE80) : Colors.green;
+      } else if (originalColor == Colors.orange) {
+        return isDark ? const Color(0xFFFB923C) : Colors.orange;
+      }
+      return originalColor;
+    }
+
+    final enhancedColor = getEnhancedColor(plateColor);
+
     return Row(
       children: [
         Container(
           padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
-            color: plateColor.withOpacity(0.1),
+            color:
+                isDark
+                    ? enhancedColor.withOpacity(0.15)
+                    : plateColor.withOpacity(0.1),
             borderRadius: BorderRadius.circular(8.0),
           ),
-          child: Icon(plateIcon, color: plateColor, size: 24.0),
+          child: Icon(plateIcon, color: enhancedColor, size: 24.0),
         ),
         const SizedBox(width: 12.0),
         Expanded(
@@ -125,8 +137,11 @@ class CalculationWidget extends StatelessWidget {
                 ),
               ),
               Text(
-                '${plateSize}-piece plates calculation',
-                style: TextStyle(fontSize: 14.0, color: Colors.grey.shade600),
+                '$plateSize-piece plates calculation',
+                style: TextStyle(
+                  fontSize: 14.0,
+                  color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
+                ),
               ),
             ],
           ),
@@ -135,25 +150,36 @@ class CalculationWidget extends StatelessWidget {
     );
   }
 
-  // Counts Section
-  Widget buildCountsSection() {
+  // Counts Section - Enhanced with improved dark mode colors
+  Widget buildCountsSection(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
-        color: Colors.grey.shade50,
+        color:
+            isDark
+                ? const Color(0xFF2C2C2C) // Dark grey instead of cardColor
+                : Colors.grey.shade50,
         borderRadius: BorderRadius.circular(8.0),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(
+          color:
+              isDark
+                  ? const Color(0xFF404040) // Subtle border
+                  : Colors.grey.shade200,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Plate Counts:',
+            'Plate Counts',
             style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 8.0),
           Center(
             child: buildCountItem(
+              context,
               'Total',
               vegCount + chickenCount,
               Colors.blue,
@@ -165,8 +191,8 @@ class CalculationWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              buildCountItem('Veg', vegCount, Colors.green),
-              buildCountItem('Chicken', chickenCount, Colors.red),
+              buildCountItem(context, 'Veg', vegCount, Colors.green),
+              buildCountItem(context, 'Chicken', chickenCount, Colors.red),
             ],
           ),
         ],
@@ -175,26 +201,47 @@ class CalculationWidget extends StatelessWidget {
   }
 
   Widget buildCountItem(
+    BuildContext context,
     String label,
     int count,
     Color color, {
     bool isTotal = false,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    // Enhanced color mapping
+    Color getEnhancedColor(Color originalColor) {
+      if (originalColor == Colors.blue) {
+        return isDark ? const Color(0xFF60A5FA) : Colors.blue;
+      } else if (originalColor == Colors.green) {
+        return isDark ? const Color(0xFF4ADE80) : Colors.green;
+      } else if (originalColor == Colors.red) {
+        return isDark ? const Color(0xFFEF4444) : Colors.red;
+      }
+      return originalColor;
+    }
+
+    final enhancedColor = getEnhancedColor(color);
+
     return Column(
       children: [
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color:
+                isDark
+                    ? enhancedColor.withOpacity(0.2)
+                    : color.withOpacity(0.1),
             borderRadius: BorderRadius.circular(16.0),
-            border: isTotal ? Border.all(color: color, width: 2.0) : null,
+            border:
+                isTotal ? Border.all(color: enhancedColor, width: 2.0) : null,
           ),
           child: Text(
             count.toString(),
             style: TextStyle(
               fontSize: isTotal ? 18.0 : 16.0,
               fontWeight: isTotal ? FontWeight.bold : FontWeight.w600,
-              color: color,
+              color: enhancedColor,
             ),
           ),
         ),
@@ -203,7 +250,7 @@ class CalculationWidget extends StatelessWidget {
           label,
           style: TextStyle(
             fontSize: 12.0,
-            color: Colors.grey.shade700,
+            color: isDark ? Colors.grey.shade400 : Colors.grey.shade700,
             fontWeight: isTotal ? FontWeight.w600 : FontWeight.normal,
           ),
         ),
@@ -211,49 +258,66 @@ class CalculationWidget extends StatelessWidget {
     );
   }
 
-  // =============================================================================
-  // CALCULATION BREAKDOWN
-  // =============================================================================
-  Widget buildCalculationBreakdown() {
+  // CALCULATION BREAKDOWN - Enhanced with improved dark mode colors
+  Widget buildCalculationBreakdown(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
-        color: Colors.blue.shade50,
+        color:
+            isDark
+                ? const Color(0xFF1E3A8A).withOpacity(
+                  0.2,
+                ) // Deep blue background
+                : Colors.blue.shade50,
         borderRadius: BorderRadius.circular(8.0),
-        border: Border.all(color: Colors.blue.shade200),
+        border: Border.all(
+          color:
+              isDark
+                  ? const Color(0xFF3B82F6).withOpacity(0.4) // Blue border
+                  : Colors.blue.shade200,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
-              Icon(Icons.calculate, color: Colors.blue, size: 20.0),
-              SizedBox(width: 8.0),
+              Icon(
+                Icons.calculate,
+                color: isDark ? const Color(0xFF60A5FA) : Colors.blue,
+                size: 20.0,
+              ),
+              const SizedBox(width: 8.0),
               Text(
-                'Calculation Breakdown:',
+                'Calculation Breakdown',
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.w600,
-                  color: Colors.blue,
+                  color: isDark ? const Color(0xFF60A5FA) : Colors.blue,
                 ),
               ),
             ],
           ),
           const SizedBox(height: 12.0),
-
           // Veg calculation
           if (vegCount > 0)
-            buildCalculationRow('Veg', vegCount, _getVegAmount()),
-
+            buildCalculationRow(context, 'Veg', vegCount, getVegAmount()),
           // Chicken calculation
           if (chickenCount > 0)
-            buildCalculationRow('Chicken', chickenCount, _getChickenAmount()),
-
+            buildCalculationRow(
+              context,
+              'Chicken',
+              chickenCount,
+              getChickenAmount(),
+            ),
           const Divider(),
           buildCalculationRow(
+            context,
             'Total',
             vegCount + chickenCount,
-            _calculateAmount(),
+            calculateAmount(),
             isTotal: true,
           ),
         ],
@@ -262,11 +326,14 @@ class CalculationWidget extends StatelessWidget {
   }
 
   Widget buildCalculationRow(
+    BuildContext context,
     String category,
     int count,
     double amount, {
     bool isTotal = false,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
@@ -277,7 +344,10 @@ class CalculationWidget extends StatelessWidget {
             style: TextStyle(
               fontSize: isTotal ? 16.0 : 14.0,
               fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
-              color: isTotal ? Colors.blue : null,
+              color:
+                  isTotal
+                      ? (isDark ? const Color(0xFF60A5FA) : Colors.blue)
+                      : null,
             ),
           ),
           Text(
@@ -285,7 +355,10 @@ class CalculationWidget extends StatelessWidget {
             style: TextStyle(
               fontSize: isTotal ? 18.0 : 14.0,
               fontWeight: isTotal ? FontWeight.bold : FontWeight.w600,
-              color: isTotal ? Colors.green : Colors.blue,
+              color:
+                  isTotal
+                      ? (isDark ? const Color(0xFF4ADE80) : Colors.green)
+                      : (isDark ? const Color(0xFF60A5FA) : Colors.blue),
             ),
           ),
         ],
@@ -293,15 +366,13 @@ class CalculationWidget extends StatelessWidget {
     );
   }
 
-  // =============================================================================
   // INDIVIDUAL AMOUNT CALCULATIONS
-  // =============================================================================
-  double _getVegAmount() {
+  double getVegAmount() {
     switch (plateSize) {
       case 7:
-        return (vegCount * 7 / 8) * Prices.VEG_PRICE;
+        return vegCount * (7 / 8) * Prices.VEG_PRICE;
       case 4:
-        return vegCount * 15.0; // ₹30/2 = ₹15
+        return vegCount * 15.0; // 30/2 = 15
       case 8:
         return vegCount * Prices.VEG_PRICE;
       default:
@@ -309,12 +380,12 @@ class CalculationWidget extends StatelessWidget {
     }
   }
 
-  double _getChickenAmount() {
+  double getChickenAmount() {
     switch (plateSize) {
       case 7:
-        return (chickenCount * 7 / 8) * Prices.CHICKEN_PRICE;
+        return chickenCount * (7 / 8) * Prices.CHICKEN_PRICE;
       case 4:
-        return chickenCount * 17.5; // ₹35/2 = ₹17.5
+        return chickenCount * 17.5; // 35/2 = 17.5
       case 8:
         return chickenCount * Prices.CHICKEN_PRICE;
       default:
@@ -322,102 +393,140 @@ class CalculationWidget extends StatelessWidget {
     }
   }
 
-  // =============================================================================
-  // FORMULA SECTION
-  // =============================================================================
-  Widget buildFormulaSection() {
+  // FORMULA SECTION - Enhanced with improved dark mode colors
+  Widget buildFormulaSection(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
-        color: Colors.amber.shade50,
+        color:
+            isDark
+                ? const Color(0xFFF59E0B).withOpacity(
+                  0.15,
+                ) // Warm amber background
+                : Colors.amber.shade50,
         borderRadius: BorderRadius.circular(8.0),
-        border: Border.all(color: Colors.amber.shade200),
+        border: Border.all(
+          color:
+              isDark
+                  ? const Color(0xFFF59E0B).withOpacity(0.4) // Amber border
+                  : Colors.amber.shade200,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
-              Icon(Icons.functions, color: Colors.amber, size: 20.0),
-              SizedBox(width: 8.0),
+              Icon(
+                Icons.functions,
+                color: isDark ? const Color(0xFFFBBF24) : Colors.amber,
+                size: 20.0,
+              ),
+              const SizedBox(width: 8.0),
               Text(
-                'Formula Used:',
+                'Formula Used',
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.w600,
-                  color: Colors.amber,
+                  color: isDark ? const Color(0xFFFBBF24) : Colors.amber,
                 ),
               ),
             ],
           ),
           const SizedBox(height: 8.0),
-          buildFormulaText(),
+          buildFormulaText(context),
           const SizedBox(height: 8.0),
-          buildExampleCalculation(),
+          buildExampleCalculation(context),
         ],
       ),
     );
   }
 
-  Widget buildFormulaText() {
-    String formula = _getFormulaString();
+  Widget buildFormulaText(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    String formula = getFormulaString();
 
     return Text(
       formula,
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 14.0,
         fontStyle: FontStyle.italic,
-        color: Colors.black87,
+        color: isDark ? Colors.grey.shade300 : Colors.black87,
       ),
     );
   }
 
-  Widget buildExampleCalculation() {
-    String example = _getExampleString();
+  Widget buildExampleCalculation(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    String example = getExampleString();
 
     return Text(
       'Example: $example',
-      style: TextStyle(fontSize: 12.0, color: Colors.grey.shade700),
+      style: TextStyle(
+        fontSize: 12.0,
+        color: isDark ? Colors.grey.shade400 : Colors.grey.shade700,
+      ),
     );
   }
 
-  String _getFormulaString() {
+  String getFormulaString() {
     switch (plateSize) {
       case 7:
-        return 'Total Momos ÷ 8 × Price per 8-piece\nVeg: (count × 7 ÷ 8) × ₹30\nChicken: (count × 7 ÷ 8) × ₹35';
+        return 'Total Momos ÷ 8 × Price per 8-piece\n(count × 7/8 × ₹30) + (count × 7/8 × ₹35)';
       case 4:
-        return 'Fixed rate per 4-piece plate\nVeg: count × ₹15\nChicken: count × ₹17.5';
+        return 'Fixed rate per 4-piece plate\n(count × ₹15) + (count × ₹17.5)';
       case 8:
-        return 'Direct multiplication by plate price\nVeg: count × ₹30\nChicken: count × ₹35';
+        return 'Direct multiplication by plate price\n(count × ₹30) + (count × ₹35)';
       default:
         return 'Unknown plate size';
     }
   }
 
-  String _getExampleString() {
+  String getExampleString() {
     switch (plateSize) {
       case 7:
-        return '2 veg plates = (2 × 7 ÷ 8) × ₹30 = ₹52.50';
+        return '2 veg plates: 2 × 7/8 × 30 = ₹52.50';
       case 4:
-        return '2 veg + 1 chicken = (2 × ₹15) + (1 × ₹17.5) = ₹47.50';
+        return '2 veg + 1 chicken: (2 × 15) + (1 × 17.5) = ₹47.50';
       case 8:
-        return '2 veg + 1 chicken = (2 × ₹30) + (1 × ₹35) = ₹95';
+        return '2 veg + 1 chicken: (2 × 30) + (1 × 35) = ₹95';
       default:
         return 'No example available';
     }
   }
 
-  Widget buildTotalSection(double amount, int totalPlates) {
+  // Total Section - Enhanced with improved dark mode colors
+  Widget buildTotalSection(
+    BuildContext context,
+    double amount,
+    int totalPlates,
+  ) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Colors.green.shade50, Colors.green.shade100],
+          colors:
+              isDark
+                  ? [
+                    const Color(0xFF4ADE80).withOpacity(0.2),
+                    const Color(0xFF22C55E).withOpacity(0.15),
+                  ]
+                  : [Colors.green.shade50, Colors.green.shade100],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(12.0),
-        border: Border.all(color: Colors.green.shade300, width: 2.0),
+        border: Border.all(
+          color:
+              isDark
+                  ? const Color(0xFF4ADE80).withOpacity(0.5)
+                  : Colors.green.shade300,
+          width: 2.0,
+        ),
       ),
       child: Column(
         children: [
@@ -428,18 +537,19 @@ class CalculationWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${plateSize}-Piece Total',
-                    style: const TextStyle(
+                    '$plateSize-Piece Total',
+                    style: TextStyle(
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
-                      color: Colors.green,
+                      color: isDark ? const Color(0xFF4ADE80) : Colors.green,
                     ),
                   ),
                   Text(
                     '$totalPlates plates',
                     style: TextStyle(
                       fontSize: 14.0,
-                      color: Colors.grey.shade600,
+                      color:
+                          isDark ? Colors.grey.shade400 : Colors.grey.shade600,
                     ),
                   ),
                 ],
@@ -450,7 +560,7 @@ class CalculationWidget extends StatelessWidget {
                   vertical: 8.0,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.green,
+                  color: isDark ? const Color(0xFF4ADE80) : Colors.green,
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: Text(
@@ -464,21 +574,24 @@ class CalculationWidget extends StatelessWidget {
               ),
             ],
           ),
-
           if (totalPlates > 0) ...[
             const SizedBox(height: 12.0),
-            const Divider(color: Colors.green),
+            Divider(color: isDark ? const Color(0xFF4ADE80) : Colors.green),
             const SizedBox(height: 8.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.info_outline, size: 16.0, color: Colors.green),
+                Icon(
+                  Icons.info_outline,
+                  size: 16.0,
+                  color: isDark ? const Color(0xFF4ADE80) : Colors.green,
+                ),
                 const SizedBox(width: 4.0),
                 Text(
                   'Average: ₹${(amount / totalPlates).toStringAsFixed(2)} per plate',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14.0,
-                    color: Colors.green,
+                    color: isDark ? const Color(0xFF4ADE80) : Colors.green,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
